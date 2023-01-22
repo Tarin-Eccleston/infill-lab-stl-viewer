@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.SubScene?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.PrimaryController">
+<VBox prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.PrimaryController">
    <children>
       <MenuBar>
         <menus>
@@ -29,11 +30,13 @@
           </Menu>
         </menus>
       </MenuBar>
-      <AnchorPane prefHeight="200.0" prefWidth="400.0">
-         <children>
-            <Label layoutX="166.0" layoutY="92.0" text="Primary View" />
-            <Button fx:id="primaryButton" alignment="CENTER" layoutX="21.0" layoutY="109.0" onAction="#switchToSecondary" text="Switch Secondary View" AnchorPane.bottomAnchor="66.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="109.0" />
-         </children>
-      </AnchorPane>
+      <Button fx:id="primaryButton" alignment="CENTER" onAction="#switchToSecondary" text="Switch to Secondary View" />
+      <Label text="Primary View" />
+      <Button mnemonicParsing="false" onAction="#showAbout" text="Open File" />
+      <SubScene fx:id="scene_3d" fill="WHITE" height="288.0" width="500.0">
+        <root>
+          <Region />
+        </root>
+      </SubScene>
    </children>
 </VBox>
