@@ -187,13 +187,19 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
 
         Button xn_button = new Button("x-");
         Button xp_button = new Button("x+");
+        Button rplus_button = new Button("rplus");
+        Button rminus_button = new Button("rplus");
         xn_button.setLayoutX(500);
         xp_button.setLayoutX(550);
+        rplus_button.setLayoutX(600);
+        rminus_button.setLayoutX(650);
         Label label = new Label("Not clicked");
         label.setLayoutX(700);
 
         group.getChildren().add(xn_button);
         group.getChildren().add(xp_button);
+        group.getChildren().add(rplus_button);
+        group.getChildren().add(rminus_button);
         group.getChildren().add(label);
 
         xn_button.setOnAction(value ->  {
@@ -202,14 +208,19 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         });
 
         xp_button.setOnAction(value ->  {
-          label.setText("x+");
-          // camera.setTranslateX(camera.getTranslateX() + 5);
-          Point3D origin = new Point3D(0,0,0);
-          // Todo: work out how to get current camera position later
-          Point3D cameraPosition = new Point3D(0,0,0);
-          lookAt(cameraPosition, origin);
+          label.setText("rplus");
        });
 
+       rplus_button.setOnAction(value ->  {
+        label.setText("rplus");
+        camera.setRotate(camera.getRotate() + 5);;
+      });
+
+      rminus_button.setOnAction(value ->  {
+        label.setText("rminus");
+        camera.setRotate(camera.getRotate() - 5);;
+      });
+      
         return group;
       }
 
