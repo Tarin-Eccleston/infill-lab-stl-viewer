@@ -38,19 +38,7 @@ public class App extends Application {
     private static final boolean obj = false;
     private static final boolean filled = true;
     private Font universalFont = new Font("Arial", 12);
-    // private Font universalFont = new Font("Arial", FontWeight.BOLD, 12);
-/* 
-    public float SignedVolumeOfTriangle(Vector3 p1, Vector3 p2, Vector3 p3)
-    {
-        var v321 = p3.x * p2.y * p1.z;
-        var v231 = p2.x * p3.y * p1.z;
-        var v312 = p3.x * p1.y * p2.z;
-        var v132 = p1.x * p3.y * p2.z;
-        var v213 = p2.x * p1.y * p3.z;
-        var v123 = p1.x * p2.y * p3.z;
-        return (1.0f / 6.0f) * (-v321 + v231 + v312 - v132 - v213 + v123);
-    }
-*/
+
 
 
 public float SignedVolumeOfTriangle(float p1x,float p1y,float p1z,float p2x,float p2y,float p2z,float p3x,float p3y,float p3z)
@@ -62,6 +50,22 @@ public float SignedVolumeOfTriangle(float p1x,float p1y,float p1z,float p2x,floa
     var v213 = p2x * p1y * p3z;
     var v123 = p1x * p2y * p3z;
     return (1.0f / 6.0f) * (-v321 + v231 + v312 - v132 - v213 + v123);
+}
+
+public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,double p2y,double p2z,double p3x,double p3y,double p3z)
+{
+    double Yab = p2y - p1y;
+    double Zac = p3z - p1z;
+    double Zab = p2z - p1z;
+    double Yac = p3y - p1y;
+    double Xac = p3x - p1x;
+    double Xab = p2x - p1x;
+
+    double s1 = ((Yab*Zac)-(Zab*Yac));
+    double s2 = ((Zab*Xac)-(Xab*Zac));
+    double s3 = ((Xab*Yac)-(Yab*Xac));
+
+    return 0.5f * Math.sqrt((s1*s1)+(s2*s2)+(s3*s3));
 }
 
     public Parent createContent() throws Exception{
@@ -102,21 +106,18 @@ public float SignedVolumeOfTriangle(float p1x,float p1y,float p1z,float p2x,floa
         ObservableFloatArray vertexs = mesh.getPoints();
 
         float total_volume = 0;
+        float total_area = 0;
+
         for(int i=0;(i+1)*9<=vertexs.size();i++){
           total_volume += SignedVolumeOfTriangle(vertexs.get(i*9+0), vertexs.get(i*9+1), vertexs.get(i*9+2),vertexs.get(i*9+3), vertexs.get(i*9+4), vertexs.get(i*9+5),vertexs.get(i*9+6), vertexs.get(i*9+7), vertexs.get(i*9+8));
-          //System.out.print(SignedVolumeOfTriangle(vertexs.get(i*9+0), vertexs.get(i*9+1), vertexs.get(i*9+2),vertexs.get(i*9+3), vertexs.get(i*9+4), vertexs.get(i*9+5),vertexs.get(i*9+6), vertexs.get(i*9+7), vertexs.get(i*9+8)));
-          //Console.sendMessage(total_volume.toString());
+          total_area += SignedareaOfTriangle(vertexs.get(i*9+0), vertexs.get(i*9+1), vertexs.get(i*9+2),vertexs.get(i*9+3), vertexs.get(i*9+4), vertexs.get(i*9+5),vertexs.get(i*9+6), vertexs.get(i*9+7), vertexs.get(i*9+8));
         }
-/* 
-        foreach (TriangleMesh mesh in meshArray)
-        {
-            total_volume += SignedVolumeOfTriangle(mesh.vert1, mesh.vert2, mesh.vert3);
-        }
-*/
+
         /* Build the Scene Graph */
-        Text t = new Text (10, 20, "This is a text sample" + total_volume );
-        
-        t.setFont(universalFont);
+        Text detail_text1 = new Text (10, 20, "volume = " + total_volume + " surface area = " + total_area);     
+        Text detail_text2 = new Text (10, 40, "(max,min) = ");    
+        detail_text1.setFont(universalFont);
+        detail_text2.setFont(universalFont);
 
         Group root = new Group();
         
@@ -128,7 +129,8 @@ public float SignedVolumeOfTriangle(float p1x,float p1y,float p1z,float p2x,floa
         subScene.setCamera(camera);
         Group group = new Group();
         group.getChildren().add(subScene);
-        group.getChildren().add(t);
+        group.getChildren().add(detail_text1);
+        group.getChildren().add(detail_text2);
         return group;
       }
 
