@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.collections.ObservableFloatArray;
 import javafx.collections.ObservableIntegerArray;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
@@ -41,6 +42,7 @@ public class App extends Application {
     private static final boolean obj = false;
     private static final boolean filled = true;
     private Font universalFont = new Font("Arial", 12);
+    PerspectiveCamera camera = new PerspectiveCamera(true);
 
 
 
@@ -89,7 +91,6 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
           example.setDrawMode(DrawMode.LINE);
         }
         /* Position the camera in the scene */
-        PerspectiveCamera camera = new PerspectiveCamera(true);
         if(obj){
           camera.getTransforms().addAll(
             new Rotate(-5, Rotate.Y_AXIS),
@@ -202,7 +203,11 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
 
         xp_button.setOnAction(value ->  {
           label.setText("x+");
-         camera.setTranslateX(camera.getTranslateX() + 5);
+          // camera.setTranslateX(camera.getTranslateX() + 5);
+          Point3D origin = new Point3D(0,0,0);
+          // Todo: work out how to get current camera position later
+          Point3D cameraPosition = new Point3D(0,0,0);
+          lookAt(cameraPosition, origin);
        });
 
         return group;
@@ -243,4 +248,22 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         launch();
     }
 
+public void lookAt(Point3D cameraPosition, Point3D lookAtPos)
+{        
+    //Create direction vector
+    Point3D camDirection = lookAtPos.subtract(cameraPosition.getX(), cameraPosition.getY(), cameraPosition.getZ());
+    camDirection = camDirection.normalize();
+      
+    double xRotation = Math.toDegrees(Math.asin(-camDirection.getY()));
+    double yRotation =  Math.toDegrees(Math.atan2( camDirection.getX(), camDirection.getZ()));
+    
+    Rotate rx = new Rotate(xRotation, cameraPosition.getX(), cameraPosition.getY(), cameraPosition.getZ(), Rotate.X_AXIS);
+    Rotate ry = new Rotate(yRotation, cameraPosition.getX(), cameraPosition.getY(), cameraPosition.getZ(),  Rotate.Y_AXIS);
+    
+    camera.getTransforms().addAll( ry, rx, 
+            new Translate(
+                    cameraPosition.getX(), 
+                    cameraPosition.getY(), 
+                    cameraPosition.getZ()));
+}
 }
