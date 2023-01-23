@@ -28,6 +28,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.Console;
@@ -43,7 +44,7 @@ public class App extends Application {
 
     private static Scene scene;
     private static final boolean obj = false;
-    private static final boolean filled = true;
+    private static final boolean filled = false;
     private Font universalFont = new Font("Arial", 12);
     PerspectiveCamera camera = new PerspectiveCamera(true);
 
@@ -79,13 +80,13 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
     return 0.5f * Math.sqrt((s1*s1)+(s2*s2)+(s3*s3));
 }
 
-    public Parent createContent() throws Exception{
+    public Parent createContent(File file) throws Exception{
         /* Import STL model */
         MeshView example;
         if(obj){
-          example = Loader.loadObj("assets/models/computer.obj");
+          example = Loader.loadObj(file.getPath());
         }else{
-          example = Loader.loadStl("assets/models/computer.stl");
+          example = Loader.loadStl(file.getPath());
         }
         if(filled){
           PhongMaterial pm = new PhongMaterial();
@@ -284,6 +285,9 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         stage.setScene(scene);
         stage.show();
         */
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Open File");
+        File file = chooser.showOpenDialog(new Stage());
 
         Button button = new Button();
         //Setting text to the button
@@ -294,7 +298,7 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         
 
         stage.setResizable(false);
-        Scene scene = new Scene(createContent());
+        Scene scene = new Scene(createContent(file));
         stage.setScene(scene);
         stage.show();
     }
