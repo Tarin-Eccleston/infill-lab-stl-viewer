@@ -13,6 +13,9 @@ import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -43,6 +46,9 @@ public class App extends Application {
     private static final boolean filled = true;
     private Font universalFont = new Font("Arial", 12);
     PerspectiveCamera camera = new PerspectiveCamera(true);
+
+    double last_mouse_position_X = 0.0;
+    double last_mouse_position_Y = 0.0;
 
 
 
@@ -194,13 +200,26 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         rplus_button.setLayoutX(600);
         rminus_button.setLayoutX(650);
         Label label = new Label("Not clicked");
+        Label mouse_lable = new Label("no action");
         label.setLayoutX(700);
+        mouse_lable.setLayoutX(500);
+        mouse_lable.setLayoutY(20);
 
         group.getChildren().add(xn_button);
         group.getChildren().add(xp_button);
         group.getChildren().add(rplus_button);
         group.getChildren().add(rminus_button);
         group.getChildren().add(label);
+        group.getChildren().add(mouse_lable);
+
+        subScene.setOnMouseDragged(e -> {
+          updateMousePosition(e,mouse_lable);
+        });
+
+        subScene.setOnScroll(e -> {
+          e.getDeltaY();
+          updateZoomPosition(e,mouse_lable);
+        });
 
         xn_button.setOnAction(value ->  {
            label.setText("x-");
@@ -223,6 +242,40 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
       
         return group;
       }
+
+      public void updateZoomPosition(ScrollEvent  e, Label l) {
+
+        l.setText("zoom (" + e.getDeltaY() + ")");
+
+        
+        //txtPosition.setVisible(true);
+    }
+
+    public void updateMousePosition(MouseEvent e, Label l) {
+        if( e.getButton() == MouseButton.SECONDARY){
+          //l.setText("rotate (" + e.getX() + ", " + e.getY() + ")");
+        double delta_x = e.getX() - last_mouse_position_X;
+        double delta_y = e.getY() - last_mouse_position_Y;
+        if(delta_x > 5 || delta_x < -5) delta_x = 0;
+        if(delta_y > 5 || delta_y < -5) delta_y = 0;
+          l.setText("rotate (" + delta_x + "," + delta_y +")");
+          camera.setRotate(camera.getRotate() + (delta_y * 0.3f));
+          Point3D new_rotation = new Point3D(camera.getRotationAxis().getX() + (delta_x * 0.3f), camera.getRotationAxis().getY() + (delta_y * 0.3f), camera.getRotationAxis().getZ());
+          //Point3D new_rotation = new Point3D((delta_x * 0.3f), (delta_y * 0.3f), 0f);
+          camera.setRotationAxis(new_rotation);
+          //camera.setRotate(camera.getRotate());
+
+          last_mouse_position_X = e.getX();
+          last_mouse_position_Y = e.getY();
+
+        }
+        else if( e.getButton() == MouseButton.PRIMARY){
+          l.setText("translate (" + e.getX() + ", " + e.getY() + ")");
+        }
+        
+        
+        //txtPosition.setVisible(true);
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
