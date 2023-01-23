@@ -141,7 +141,7 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
           } 
         }
 
-        float test = 0;
+        float test1 = 0;
         float bounding_vol = (max_x - min_x) * (max_y - min_y) * (max_z - min_z);
 
         for(int i=0;(i+1)*9<=vertexs.size();i++){
