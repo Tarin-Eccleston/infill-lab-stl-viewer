@@ -117,35 +117,44 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         // Calculate min / max x,y,z values of .stl
         for(int i=0;(i+1)*3<=vertexs.size();i++){
           // X max / min
-          if (min_x > vertexs.get(i*3)) {
+          if (min_x > vertexs.get(i*3)){
             min_x  = vertexs.get(i*3);
           }
-          if (max_x < vertexs.get(i*3)) {
+          if (max_x < vertexs.get(i*3)){
             max_x  = vertexs.get(i*3);
           }
 
           // Y max / min
-          if (min_y > vertexs.get(i*3+1)) {
+          if (min_y > vertexs.get(i*3+1)){
             min_y  = vertexs.get(i*3+1);
           }
-          if (max_y < vertexs.get(i*3+1)) {
+          if (max_y < vertexs.get(i*3+1)){
             max_y  = vertexs.get(i*3+1);
           } 
 
           // Z max / min
-          if (min_z > vertexs.get(i*3+2)) {
+          if (min_z > vertexs.get(i*3+2)){
             min_z  = vertexs.get(i*3+2);
           }
-          if (max_z < vertexs.get(i*3+2)) {
+          if (max_z < vertexs.get(i*3+2)){
             max_z  = vertexs.get(i*3+2);
           } 
+        }
+
+        float bounding_vol = (max_x - min_x) * (max_y - min_y) * (max_z - min_z);
+
+        for(int i=0;(i+1)*9<=vertexs.size();i++){
+          total_volume += SignedVolumeOfTriangle(vertexs.get(i*9+0), vertexs.get(i*9+1), vertexs.get(i*9+2),vertexs.get(i*9+3), vertexs.get(i*9+4), vertexs.get(i*9+5),vertexs.get(i*9+6), vertexs.get(i*9+7), vertexs.get(i*9+8));
+          total_area += SignedareaOfTriangle(vertexs.get(i*9+0), vertexs.get(i*9+1), vertexs.get(i*9+2),vertexs.get(i*9+3), vertexs.get(i*9+4), vertexs.get(i*9+5),vertexs.get(i*9+6), vertexs.get(i*9+7), vertexs.get(i*9+8));
         }
 
         /* Build the Scene Graph */
         Text detail_text1 = new Text (10, 20, "volume = " + total_volume + " surface area = " + total_area);     
         Text detail_text2 = new Text (10, 40, "(max,min) = " + min_x + " " + min_y + " " + min_z + " " + max_x + " " + max_y + " "+ max_z);    
+        Text detail_text3 = new Text (10, 60, "Bounding Box Vol = " + bounding_vol);    
         detail_text1.setFont(universalFont);
         detail_text2.setFont(universalFont);
+        detail_text3.setFont(universalFont);
 
         Group root = new Group();
         
@@ -159,6 +168,7 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         group.getChildren().add(subScene);
         group.getChildren().add(detail_text1);
         group.getChildren().add(detail_text2);
+        group.getChildren().add(detail_text3);
         return group;
       }
 
