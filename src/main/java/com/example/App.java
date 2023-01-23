@@ -9,9 +9,12 @@ import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.ObservableFaceArray;
@@ -96,8 +99,8 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         }else{
           camera.getTransforms().addAll(
             new Rotate(5, Rotate.Y_AXIS),
-            new Rotate(-110, Rotate.X_AXIS),
-            new Translate(0, 0, -80)
+            new Rotate(-120, Rotate.X_AXIS),
+            new Translate(0, 0, -90)
           );
         }
 
@@ -157,8 +160,18 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         detail_text2.setFont(universalFont);
         detail_text3.setFont(universalFont);
 
+        Box boundary_box = new Box();
+        boundary_box.setHeight(max_y - min_y);  
+        boundary_box.setWidth(max_x - min_x);  
+        boundary_box.setDepth(max_z - min_z);  
+        boundary_box.setTranslateX((max_x + min_x) / 2);  
+        boundary_box.setTranslateY((max_y + min_y) / 2);  
+        boundary_box.setTranslateZ((max_z + min_z) / 2); 
+        boundary_box.setDrawMode(DrawMode.LINE); 
+
         Group root = new Group();
         
+        root.getChildren().add(boundary_box);
         root.getChildren().add(camera);
         root.getChildren().add(example);
         /* Use a SubScene */
@@ -170,6 +183,28 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         group.getChildren().add(detail_text1);
         group.getChildren().add(detail_text2);
         group.getChildren().add(detail_text3);
+
+        Button xn_button = new Button("x-");
+        Button xp_button = new Button("x+");
+        xn_button.setLayoutX(500);
+        xp_button.setLayoutX(550);
+        Label label = new Label("Not clicked");
+        label.setLayoutX(700);
+
+        group.getChildren().add(xn_button);
+        group.getChildren().add(xp_button);
+        group.getChildren().add(label);
+
+        xn_button.setOnAction(value ->  {
+           label.setText("x-");
+          camera.setTranslateX(camera.getTranslateX() - 5);
+        });
+
+        xp_button.setOnAction(value ->  {
+          label.setText("x+");
+         camera.setTranslateX(camera.getTranslateX() + 5);
+       });
+
         return group;
       }
 
@@ -180,6 +215,14 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         stage.setScene(scene);
         stage.show();
         */
+
+        Button button = new Button();
+        //Setting text to the button
+        button.setText("Sample Button");
+        //Setting the location of the button
+        button.setTranslateX(150);
+        button.setTranslateY(60);
+        
 
         stage.setResizable(false);
         Scene scene = new Scene(createContent());
