@@ -16,6 +16,8 @@ import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.ObservableFaceArray;
 import javafx.scene.shape.TriangleMesh;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
@@ -35,6 +37,8 @@ public class App extends Application {
     private static Scene scene;
     private static final boolean obj = false;
     private static final boolean filled = true;
+    private Font universalFont = new Font("Arial", 12);
+    // private Font universalFont = new Font("Arial", FontWeight.BOLD, 12);
 /* 
     public float SignedVolumeOfTriangle(Vector3 p1, Vector3 p2, Vector3 p3)
     {
@@ -111,6 +115,8 @@ public float SignedVolumeOfTriangle(float p1x,float p1y,float p1z,float p2x,floa
 */
         /* Build the Scene Graph */
         Text t = new Text (10, 20, "This is a text sample" + total_volume );
+        
+        t.setFont(universalFont);
 
         Group root = new Group();
         
