@@ -34,6 +34,7 @@ import javafx.stage.Stage;
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * JavaFX App
@@ -86,7 +87,28 @@ public double SignedareaOfTriangle(double p1x,double p1y,double p1z,double p2x,d
         if(obj){
           example = Loader.loadObj(file.getPath());
         }else{
-          example = Loader.loadStl(file.getPath());
+          List<Triangle> triangles = new STLParser().parseSTLFile(file.toPath());	
+          TriangleMesh tmesh = new TriangleMesh();
+          for(int i=0;i<triangles.size();i++){
+
+            for(int j=0;j<3;j++){
+              tmesh.getTexCoords().addAll((((float)triangles.get(i).getNormal().x + 1) / -2));
+              tmesh.getTexCoords().addAll((((float)triangles.get(i).getNormal().y + 1) / -2));
+              tmesh.getTexCoords().addAll((((float)triangles.get(i).getNormal().z + 1) / -2));
+
+              tmesh.getPoints().addAll((float)triangles.get(i).getVertices()[j].x);
+              tmesh.getPoints().addAll((float)triangles.get(i).getVertices()[j].y);
+              tmesh.getPoints().addAll((float)triangles.get(i).getVertices()[j].z);
+
+              tmesh.getFaces().addAll((i*3)+j, (i*3)+j);
+            }
+            
+          }
+
+          example = new MeshView(tmesh);
+          //example = Loader.loadStl(file.getPath());
+
+          
         }
         if(filled){
           PhongMaterial pm = new PhongMaterial();
